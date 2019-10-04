@@ -9,97 +9,107 @@
 # Se necesita de Numpy
 import numpy as np
 
-def validateNumber(variable):
+def validateNum(value):
+    #Valida si el ingreso del numero 
+    #Es un valor correcto 
     try:
-        # Try cast
-        int(variable)
+        int(value)
         return True
     except ValueError:
         return False
-
-
-def isOptionInRange(x, a, b):
-    # Validates range
-    if(x >= a and x <= b) or (x <= a and x >= b):
+#Verifica que el rango sea un valor n=n debido a 
+#que las matrices que se están trabajando son cuadradas. 
+def isValueInRange(testValue, num1, num2):
+    #Verifica si el test value pertenecen 
+    #al rango establecido por num1 y num2
+    if(testValue >= num1 and testValue <= num2) or (testValue <= num1 and testValue >= num2):
         return True
     return False
 
+# Se declaran las propiedades de 
+# una MATRIZ DE RELACIÓN 
+################################################F u n  t i o n s###########################################################################
 
-# MATRIX RELATION PROPERTIES UTILS
-def isReflexive(binaryMatrix):
-    identityMatrix = np.identity(binaryMatrix.matrix.shape[0], dtype=int)
-    identityBinary = BinaryRelationMatrix(identityMatrix)
-    return(identityBinary.precedence(binaryMatrix.matrix))
-
-# Returns True if A = A**T (transposed)
-
-
+#Se verifica si es una matriz simétrica 
+#parametro: una matriz binaria 
+#retorno: devuelve True si A (intersección) AT (transposición) <= I
 def isSymmetric(binaryMatrix):
-    return(binaryMatrix.equals(binaryMatrix.transposed()))
+    return(binaryMatrix.equalsOfMatrix(binaryMatrix.transposedOfMatrix())) #Se usa directo la libreria de np 
 
-# Retuns True if	A (intersection) A**T (transposed) <= I
+#Se verifica si es reflexiva 
+#parameto: una matriz binaria
+#retorno: devuelve *True* si A = A ** T (matriz transpuesta)
+def isReflexive(binaryMatrix):
+    #Se calcula la matriz identidad 
+    identMatrix = np.identity(binaryMatrix.matrix.shape[0], dtype=int) #uso de librería de np
+    #Se aplica la matriz identidad en la matriz binaria 
+    identBinary = RelationMatrix(identMatrix)
+    #Retorno de resultado final
+    return(identBinary.precedenceOfMatrix(binaryMatrix.matrix))
 
-
+#Se verifica si es una matriz simétrica 
+#parametro: una matriz binaria 
+#retorno: devuelve True si A ** 2 <= A
 def isAntisymmetric(binaryMatrix):
-    # Calculate Identity Matrix
-    identityMatrix = np.identity(binaryMatrix.matrix.shape[0], dtype=int)
-    return((binaryMatrix.intersection(binaryMatrix.transposed())).precedence(identityMatrix))
+    #Se calcula la matriz identidad 
+    identMatrix = np.identity(binaryMatrix.matrix.shape[0], dtype=int)
+    #Retorno de resultado final 
+    #Se aplica la intersección de la matriz transpuesta (composición)
+    return((binaryMatrix.intersectionOfMatrix(binaryMatrix.transposedOfMatrix())).precedenceOfMatrix(identMatrix))
 
-# Returns True if A**2 <= A
-
-
+#Verifica si una matriz es transitiva
+#parametro: una matriz binaria 
+#retorno: devuelve si es transitiva o no la matriz (su composición es igual)
 def isTransitive(binaryMatrix):
-    return((binaryMatrix.multiplication(binaryMatrix.matrix)).precedence(binaryMatrix.matrix))
+    return((binaryMatrix.multiplicationOfMatrix(binaryMatrix.matrix)).precedenceOfMatrix(binaryMatrix.matrix))
 
-# Class for relation matrix management
-
-
-class BinaryRelationMatrix(object):
+class RelationMatrix(object):
 
     def __init__(self, matrix):
-        # Numpy matrix
+        # Se declara una matriz de np 
         self.matrix = matrix
 
-    def multiplication(self, inputMatrix):
-        dotMatrix = np.dot(self.matrix, inputMatrix)
-        return (BinaryRelationMatrix(dotMatrix))
+    def multiplicationOfMatrix(self, firstMatrix):
+        #Se realiza producto punto de matrices
+        dotProductOfMatrix = np.dot(self.matrix, firstMatrix)
+        return (RelationMatrix(dotProductOfMatrix))
 
-    def intersection(self, inputMatrix):
-        a = np.array(self.matrix, dtype=bool)
-        b = np.array(inputMatrix, dtype=bool)
-        return BinaryRelationMatrix(1*np.logical_and(a, b))
+    def intersectionOfMatrix(self, firstMatrix):
+        valueA = np.array(self.matrix, dtype=bool)
+        valueB = np.array(firstMatrix, dtype=bool)
+        return RelationMatrix(1*np.logical_and(valueA, valueB))
 
-    def precedence(self, inputMatrix):
-        booleanMatrix = self.matrix <= inputMatrix
-        booleanMatrixSearch = np.where(booleanMatrix == False)[0]
-        if(booleanMatrixSearch.size > 0):
+    def precedenceOfMatrix(self, firstMatrix):
+        boolMatrix = self.matrix <= firstMatrix
+        boolMatrixTest = np.where(boolMatrix == False)[0]
+        if(boolMatrixTest.size > 0):
             return False
-        # Not implemented yet
+        #TO-DO
         return True
 
-    def transposed(self):
+    def transposedOfMatrix(self):
         return self.matrix.transpose()
 
-    def equals(self, inputMatrix):
-        return np.array_equal(self.matrix, inputMatrix)
+    def equalsOfMatrix(self, firstMatrix):
+        return np.array_equal(self.matrix, firstMatrix)
 
 
 option = 1
 
 while(option != 2):
-    print("\n\t\tWELCOME!\n")
+    print("\n\t\tPROGRAMA DE MATRICES!\n")
     print("""
-		----------------------------
-		Choose an option:
-		1. Show relation matrix properties
-		2. Exit
-		----------------------------
+		***************************************************
+		Seleccione una opción
+		1. Ver propiedades de matrices
+		2. Terminar el programa
+		***************************************************
 	""")
     option = input("> ")
-    if(validateNumber(option)):
+    if(validateNum(option)):
         option = int(option)
         # Check if option is in range
-        validRange = isOptionInRange(option, 1, 2)
+        validRange = isValueInRange(option, 1, 2)
         if(validRange):
             if(option == 1):  # Check Matrix properties
                 print("""
@@ -130,7 +140,7 @@ while(option != 2):
                     matrixLine = input("> ")
 
                 matrix = np.array(myRelationMatrix, dtype=int)
-                matrix = BinaryRelationMatrix(matrix)
+                matrix = RelationMatrix(matrix)
 
                 # Checking properties
                 isReflexiveMatrix = "Yes" if isReflexive(matrix) else "No"
