@@ -69,29 +69,33 @@ class RelationMatrix(object):
         # Se declara una matriz de np 
         self.matrix = matrix
 
+    
+    def transposedOfMatrix(self):
+        return self.matrix.transpose()
+
+    def equalsOfMatrix(self, firstMatrix):
+        return np.array_equal(self.matrix, firstMatrix)
+
+
     def multiplicationOfMatrix(self, firstMatrix):
         #Se realiza producto punto de matrices
         dotProductOfMatrix = np.dot(self.matrix, firstMatrix)
         return (RelationMatrix(dotProductOfMatrix))
 
     def intersectionOfMatrix(self, firstMatrix):
+        #Se valida la interesccion entre matrices 
         valueA = np.array(self.matrix, dtype=bool)
         valueB = np.array(firstMatrix, dtype=bool)
         return RelationMatrix(1*np.logical_and(valueA, valueB))
 
     def precedenceOfMatrix(self, firstMatrix):
+        #Se evalua la precedencia de matrices / aun no terminado
         boolMatrix = self.matrix <= firstMatrix
         boolMatrixTest = np.where(boolMatrix == False)[0]
         if(boolMatrixTest.size > 0):
             return False
         #TO-DO
         return True
-
-    def transposedOfMatrix(self):
-        return self.matrix.transpose()
-
-    def equalsOfMatrix(self, firstMatrix):
-        return np.array_equal(self.matrix, firstMatrix)
 
 
 option = 1
@@ -108,10 +112,9 @@ while(option != 2):
     option = input("> ")
     if(validateNum(option)):
         option = int(option)
-        # Check if option is in range
         validRange = isValueInRange(option, 1, 2)
         if(validRange):
-            if(option == 1):  # Check Matrix properties
+            if(option == 1):
                 print("""
 				
                     .-------.        .-''-.     .-'''-.   ___    _   .---. ,---------.  
@@ -125,7 +128,7 @@ while(option != 2):
                     ''-'   `'-'     `'-..-'    `-...-'    ``-'`-''   `--------`'---'    
                                                                     
 					Ingresar matriz relación de la siguiente forma:  
-					recuerde, colocar un "*" al final para lograr su ejecución
+					recuerde, colocar un "*" (asterisco) al final para lograr su ejecución
 					> 1 0 1
 					> 1 1 1
 					> 1 0 0
@@ -141,24 +144,23 @@ while(option != 2):
 
                 matrix = np.array(myRelationMatrix, dtype=int)
                 matrix = RelationMatrix(matrix)
-
-                # Checking properties
-                isReflexiveMatrix = "Yes" if isReflexive(matrix) else "No"
-                isSymmetricMatrix = "Yes" if isSymmetric(matrix) else "No"
-                isAntisymmetricMatrix = "Yes" if isAntisymmetric(
-                    matrix) else "No"
-                isTransitiveMatrix = "Yes" if isTransitive(matrix) else "No"
+				
+                isReflexiveMatrix = "SI" if isReflexive(matrix) else "NO"
+                isSymmetricMatrix = "SI" if isSymmetric(matrix) else "NO"
+                isAntisymmetricMatrix = "Si" if isAntisymmetric(
+                    matrix) else "NO"
+                isTransitiveMatrix = "SI" if isTransitive(matrix) else "NO"
 
                 print("*****************************")
-                print("* Reflexivity: " + isReflexiveMatrix)
-                print("* Symmetry: " + isSymmetricMatrix)
-                print("* Antisymmetry: " + isAntisymmetricMatrix)
-                print("* Transitivity: " + isTransitiveMatrix)
+                print("* Reflexiva: " + isReflexiveMatrix)
+                print("* Simétrica: " + isSymmetricMatrix)
+                print("* Antisimétrica: " + isAntisymmetricMatrix)
+                print("* Transitiva: " + isTransitiveMatrix)
                 print("******************************")
 
-            elif(option == 2):  # Exit
-                print("Exit...")
+            elif(option == 2):  # Salir del orograma
+                print("Finl del programa")
         else:
-            print('Value out of range, try again...')
+            print('Error, el valor se encuentra fuera del rango')
     else:
-        print("Value is not a valid number, try again...")
+        print("Error, el valor ingresado no es un número correcto")
