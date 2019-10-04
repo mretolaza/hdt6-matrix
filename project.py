@@ -135,15 +135,19 @@ while(option != 2):
 					> *
 				""")
 
-                myRelationMatrix = []
-                matrixLine = input("> ")
-                while(matrixLine != '*'):
-                    newRow = matrixLine.split(' ')
-                    myRelationMatrix.append(newRow)
-                    matrixLine = input("> ")
+                myFirstMatrix = []
+                matrixValueL = input("> ")
+                while(matrixValueL != '*'):
+                    newRowOfMatrix = matrixValueL.split(' ')
+                    myFirstMatrix.append(newRowOfMatrix)
+                    matrixValueL = input("> ")
 
-                matrix = np.array(myRelationMatrix, dtype=int)
+                matrix = np.array(myFirstMatrix, dtype=int)
                 matrix = RelationMatrix(matrix)
+
+                #Llamado a las funciones declaradas 
+                #Se compara si la matrix que ingresa el usuario 
+                #Contiene alguna de las propiedades indicadas
 				
                 isReflexiveMatrix = "SI" if isReflexive(matrix) else "NO"
                 isSymmetricMatrix = "SI" if isSymmetric(matrix) else "NO"
